@@ -4,7 +4,7 @@ from collections import namedtuple
 from pymonad.either import Left, Either
 
 ###############################################################################
-# XXX
+#  Lambdas/functions
 #
 is_adult = lambda p: getattr(p, 'age') > 21
 is_male = lambda p: getattr(p, 'sex') == 'm'
@@ -12,12 +12,11 @@ is_male = lambda p: getattr(p, 'sex') == 'm'
 def increase_age(p, new_age):
     new_p = None
     try:
-        new_p = copy_namedtuple_except(Person, p, 'age', 10)
+        new_p = copy_namedtuple_except(type(p), p, 'age', 10)
     except Exception as ex:
         new_p = Left("Can't set attribute, fiend.")
     finally:
         return new_p
-    
 
 def to_s(p):
     s = f"First name: {getattr(p, 'fname')}"
@@ -32,10 +31,12 @@ def to_s(p):
 #
 def entry_point():
     try:
+        # Set up input: Person object
         fields = ('fname', 'lname', 'age', 'hotness', 'sex')
         Person = namedtuple("Person", fields, defaults=(None,) * len(fields))
         p = Person('bill', 'esquire', 22, 6, 'm')
 
+        # set up pre- and post-conditions
         pre = monad_checker(
             validator("Person must be an adult", is_adult),
             validator("Person must be male", is_male))
@@ -44,8 +45,10 @@ def entry_point():
             validator("age must be less than 45", lambda p: less_than(45)),
             validator("age must be greater than 10", lambda p: greater_than(10)))
 
+        # this is the processing step
         inc_age = curry2(increase_age)
         
+        # set up chain
         e = (Either.insert(p)
                 .then(pre)
                 .then(inc_age(10))
