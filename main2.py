@@ -1,11 +1,12 @@
 from bc.monad import monad_checker
-from bc.tools import curry2, validator, copy_namedtuple_except, less_than, greater_than
+from bc.tools import curry2, validator, copy_namedtuple_except 
+from bc.parts import less_than, greater_than
 from collections import namedtuple
 from pymonad.either import Left, Either
 
 ###############################################################################
 #  Lambdas/functions
-#
+
 is_adult = lambda p: getattr(p, 'age') > 21
 is_male = lambda p: getattr(p, 'sex') == 'm'
 

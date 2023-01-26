@@ -24,15 +24,10 @@ def retarg(arg):
     """
     return arg
 
-_identity = curry1(retarg)
-
 
 ###############################################################################
 # Miscellaneous functions
 #
-less_than = curry2(lambda lhs, rhs: lhs < rhs)
-greater_than = curry2(lambda lhs, rhs: lhs > rhs)
-
 def copy_namedtuple_except(NT_CLASS, nt, key, value):
     """Creates copy of argument namedtuple 'nt', replacing one field value for argument 'value'
 
